@@ -17,6 +17,9 @@ import com.example.api_usuarios.Model.Region;
 import com.example.api_usuarios.Model.Usuario;
 import com.example.api_usuarios.Repository.RegionRepository;
 import com.example.api_usuarios.Repository.UsuarioRepository;
+
+import main.java.com.example.api_usuarios.RestClient.CrearCarritoDTO;
+
 import com.example.api_usuarios.Service.UsuarioService;
 
 @Service 
@@ -87,13 +90,32 @@ public class UsuarioServiceImpl implements UsuarioService {
         // Mapear DTO a Entidad aplicando cifrado de contrasena
         Usuario usuario = usuarioDTOMapper.toEntity(postUsuarioDTO, region);
 
-        // Guardar entidad
+        // Guardar entidad localmente en la base de datos de usuarios
         Usuario usuarioGuardado = usuarioRepository.save(usuario);
+
+        // --- INICIO DE COMUNICACIÓN CON API_COMPRAS ---
+        try {
+            // Empaquetar el ID autogenerado
+            CrearCarritoDTO dtoCarrito = new CrearCarritoDTO(usuarioGuardado.getId_usuario());
+
+            // Enviar la petición POST
+            comprasRestClient.post()
+                    .uri("/") // Se concatena a la baseUrl: http://localhost:8082/api/carritosApi/
+                    .body(dtoCarrito)
+                    .retrieve()
+                    .toBodilessEntity(); // Ejecuta la petición sin mapear un cuerpo de respuesta complejo
+
+        } catch (Exception e) {
+            // Bloque catch vital: si api_compras está apagado o falla, capturamos el error
+            // para que no detenga el flujo y el usuario sí se devuelva exitosamente.
+            System.err.println("Advertencia: Usuario creado, pero falló la creación del carrito. Detalle: " + e.getMessage());
+        }
+        // --- FIN DE COMUNICACIÓN ---
 
         // Retornar DTO sin password
         return usuarioDTOMapper.toGetUsuarioDTO(usuarioGuardado);
     }
-
+    
 
     // metodos PUT
     @Override
