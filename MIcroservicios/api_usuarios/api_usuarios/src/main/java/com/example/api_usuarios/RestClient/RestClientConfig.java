@@ -1,4 +1,4 @@
-package main.java.com.example.api_usuarios.RestClient;
+package com.example.api_usuarios.RestClient;
 
 
 import org.springframework.context.annotation.Bean;

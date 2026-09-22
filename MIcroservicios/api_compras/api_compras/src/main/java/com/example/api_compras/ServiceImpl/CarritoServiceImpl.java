@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.api_compras.DTO.CarritoDTO.CarritoDTOMapper;
 import com.example.api_compras.DTO.CarritoDTO.getCarritoDTO;
@@ -16,6 +17,7 @@ import com.example.api_compras.Repository.CarritoRepository;
 import com.example.api_compras.RestClient.UsuarioClient;
 import com.example.api_compras.Service.CarritoService;
 
+@Service 
 public class CarritoServiceImpl implements CarritoService {
 
 

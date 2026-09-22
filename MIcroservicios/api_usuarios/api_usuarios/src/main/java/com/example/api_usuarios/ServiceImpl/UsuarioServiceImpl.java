@@ -15,10 +15,11 @@ import com.example.api_usuarios.DTO.usuarioDTO.putUsuarioDTO;
 import com.example.api_usuarios.DTO.usuarioDTO.putUsuarioDTOAdmin;
 import com.example.api_usuarios.Model.Region;
 import com.example.api_usuarios.Model.Usuario;
+import com.example.api_usuarios.RestClient.CrearCarritoDTO;
 import com.example.api_usuarios.Repository.RegionRepository;
 import com.example.api_usuarios.Repository.UsuarioRepository;
+import com.example.api_usuarios.RestClient.RestClientConfig;
 
-import main.java.com.example.api_usuarios.RestClient.CrearCarritoDTO;
 
 import com.example.api_usuarios.Service.UsuarioService;
 
@@ -37,6 +38,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RestClientConfig rest;
 
 
     // metodos GET
@@ -99,7 +103,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             CrearCarritoDTO dtoCarrito = new CrearCarritoDTO(usuarioGuardado.getId_usuario());
 
             // Enviar la petición POST
-            comprasRestClient.post()
+            rest.comprasRestClient().post()
                     .uri("/") // Se concatena a la baseUrl: http://localhost:8082/api/carritosApi/
                     .body(dtoCarrito)
                     .retrieve()

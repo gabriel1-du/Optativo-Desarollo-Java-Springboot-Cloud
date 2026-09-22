@@ -3,11 +3,13 @@ package com.example.api_compras.ServiceImpl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.api_compras.Model.MedioPago;
 import com.example.api_compras.Repository.MedioPagoRepository;
 import com.example.api_compras.Service.MedioPagoService;
 
+@Service 
 public class MedioPagoServiceImpl implements MedioPagoService {
 
     // Inyeccion de repositorios y dependencias
