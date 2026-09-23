@@ -18,5 +18,6 @@ public class postUsuarioDTO {
     private String contrasena;
     private Boolean permiso_admin;
     private Long id_region;
+    private Long id_comuna;
     
 }

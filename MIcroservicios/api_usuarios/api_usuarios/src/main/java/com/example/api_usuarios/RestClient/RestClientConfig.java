@@ -11,7 +11,7 @@ public class RestClientConfig {
     @Bean
     public RestClient comprasRestClient() {
         return RestClient.builder()
-                .baseUrl("http://localhost:8082/api/carritosApi") // URL base del controlador de compras
+                .baseUrl("http://localhost:8081/api/carritosApi") // URL base del controlador de compras
                 .build();
     }
 }

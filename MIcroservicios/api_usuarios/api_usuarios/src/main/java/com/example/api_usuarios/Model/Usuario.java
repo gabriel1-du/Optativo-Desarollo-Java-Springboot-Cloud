@@ -67,6 +67,8 @@ public class Usuario {
     @JoinColumn(name = "id_region", nullable = false)
     private Region region_usuario;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_comuna", nullable = false)
+    private Comuna comuna_usuario;
 
 }

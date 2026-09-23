@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.example.api_usuarios.Model.Comuna;
 import com.example.api_usuarios.Model.Region;
 import com.example.api_usuarios.Model.Usuario;
 
@@ -68,7 +69,7 @@ public class UsuarioDTOMapper {
     }
 
     // Convertir de PostUsuarioDTO a Entidad Usuario con encriptacion alfanumerica
-    public Usuario toEntity(postUsuarioDTO dto , Region region) {
+    public Usuario toEntity(postUsuarioDTO dto , Region region, Comuna comuna) {
         if (dto == null) return null;
 
         Usuario usuario = new Usuario();
@@ -88,6 +89,7 @@ public class UsuarioDTOMapper {
 
         usuario.setPermiso_admin(dto.getPermiso_admin() != null ? dto.getPermiso_admin() : false);
         usuario.setRegion_usuario(region);
+        usuario.setComuna_usuario(comuna);
 
         return usuario;
     }

@@ -13,11 +13,13 @@ import com.example.api_usuarios.DTO.usuarioDTO.getUsuarioDTOAdmin;
 import com.example.api_usuarios.DTO.usuarioDTO.postUsuarioDTO;
 import com.example.api_usuarios.DTO.usuarioDTO.putUsuarioDTO;
 import com.example.api_usuarios.DTO.usuarioDTO.putUsuarioDTOAdmin;
+import com.example.api_usuarios.Model.Comuna;
 import com.example.api_usuarios.Model.Region;
 import com.example.api_usuarios.Model.Usuario;
 import com.example.api_usuarios.RestClient.CrearCarritoDTO;
 import com.example.api_usuarios.Repository.RegionRepository;
 import com.example.api_usuarios.Repository.UsuarioRepository;
+import com.example.api_usuarios.Repository.ComunaRepository;
 import com.example.api_usuarios.RestClient.RestClientConfig;
 
 
@@ -38,6 +40,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired 
+    private ComunaRepository comunaRepostiory;
 
     @Autowired
     private RestClientConfig rest;
@@ -91,8 +96,12 @@ public class UsuarioServiceImpl implements UsuarioService {
         Region region = regionRepository.findById(postUsuarioDTO.getId_region())
                 .orElseThrow(() -> new RuntimeException("Region no encontrada con id: " + postUsuarioDTO.getId_region()));
 
+        Comuna comuna = comunaRepostiory.findById(postUsuarioDTO.getId_comuna())
+            .orElseThrow(() -> new RuntimeException("Comuna no encontrada con id: " + postUsuarioDTO.getId_comuna()));
+
+
         // Mapear DTO a Entidad aplicando cifrado de contrasena
-        Usuario usuario = usuarioDTOMapper.toEntity(postUsuarioDTO, region);
+        Usuario usuario = usuarioDTOMapper.toEntity(postUsuarioDTO, region, comuna);
 
         // Guardar entidad localmente en la base de datos de usuarios
         Usuario usuarioGuardado = usuarioRepository.save(usuario);

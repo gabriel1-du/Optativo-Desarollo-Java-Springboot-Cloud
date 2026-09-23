@@ -21,12 +21,14 @@ CREATE TABLE USUARIOS (
     s_apellido VARCHAR(50) NOT NULL,
     correo_elec VARCHAR(100) NOT NULL UNIQUE,
     num_telefono VARCHAR(20) NOT NULL,
-    rut_dv VARCHAR(1) NOT NUll ,
+    rut_dv VARCHAR(1) NOT NULL,
     rut_cuerpo VARCHAR(9) NOT NULL,
     contrasena VARCHAR(255) NOT NULL,
     permiso_admin BOOLEAN NOT NULL DEFAULT FALSE,
     id_region BIGINT NOT NULL,
-    CONSTRAINT fk_usuarios_regiones FOREIGN KEY (id_region) REFERENCES REGIONES (id_region)
+    id_comuna BIGINT NOT NULL,
+    CONSTRAINT fk_usuarios_regiones FOREIGN KEY (id_region) REFERENCES REGIONES (id_region),
+    CONSTRAINT fk_usuarios_comunas FOREIGN KEY (id_comuna) REFERENCES COMUNAS (id_comuna)
 );
 
 -- Datos iniciales de prueba (Opcional)
