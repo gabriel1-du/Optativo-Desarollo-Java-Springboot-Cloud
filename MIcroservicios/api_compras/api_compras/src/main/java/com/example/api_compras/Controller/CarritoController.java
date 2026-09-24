@@ -82,4 +82,14 @@ public class CarritoController {
         }
     }
 
+    @DeleteMapping("/usuario/{id_usuario}")
+    public ResponseEntity<?> deleteCarritoByUsuario(@PathVariable Long id_usuario) {
+        try {
+            carritoService.deleteCarritoByUsuario(id_usuario);
+            return ResponseEntity.ok("Carrito asociado al usuario eliminado exitosamente");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
 }

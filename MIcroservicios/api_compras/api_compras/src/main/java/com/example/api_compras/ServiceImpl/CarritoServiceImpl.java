@@ -104,4 +104,14 @@ public class CarritoServiceImpl implements CarritoService {
         carritoRepository.delete(carrito_eliminado);
     }
 
+    @Override
+    public void deleteCarritoByUsuario(Long id_usuario) {
+        Carrito carrito = carritoRepository.findById_usuario(id_usuario)
+                .orElse(null); // Si no tiene carrito, no lanzamos error crítico
+
+        if (carrito != null) {
+            carritoRepository.delete(carrito);
+        }
+    }
+
 }

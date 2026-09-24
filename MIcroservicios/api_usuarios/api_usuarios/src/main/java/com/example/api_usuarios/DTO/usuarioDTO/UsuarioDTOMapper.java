@@ -42,6 +42,10 @@ public class UsuarioDTOMapper {
             dto.setId_region(usuario.getRegion_usuario().getId_region());
         }
 
+        if (usuario.getComuna_usuario() != null) {
+            dto.setId_comuna(usuario.getComuna_usuario().getId_comuna());
+        }
+
         return dto;
     }
 

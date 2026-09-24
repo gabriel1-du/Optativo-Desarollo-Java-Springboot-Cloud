@@ -17,5 +17,5 @@ public class getUsuarioDTO {
     private String num_telefono;
     private Boolean permiso_admin;
     private Long id_region;
-
+    private Long id_comuna;
 }

@@ -21,7 +21,7 @@ import com.example.api_usuarios.Repository.RegionRepository;
 import com.example.api_usuarios.Repository.UsuarioRepository;
 import com.example.api_usuarios.Repository.ComunaRepository;
 import com.example.api_usuarios.RestClient.RestClientConfig;
-
+import com.example.api_usuarios.RestClient.CrearListaDeDeseosDTO;
 
 import com.example.api_usuarios.Service.UsuarioService;
 
@@ -123,6 +123,24 @@ public class UsuarioServiceImpl implements UsuarioService {
             // para que no detenga el flujo y el usuario sí se devuelva exitosamente.
             System.err.println("Advertencia: Usuario creado, pero falló la creación del carrito. Detalle: " + e.getMessage());
         }
+
+        //----Metodo para creacion de lista de deseos
+        try {
+            // Empaquetar el ID autogenerado
+            CrearListaDeDeseosDTO dtolista = new CrearListaDeDeseosDTO(usuarioGuardado.getId_usuario());
+
+            // Enviar la petición POST
+            rest.listaDeseosRestClient().post()
+                    .uri("/") // Se concatena a la baseUrl: http://localhost:8082/api/carritosApi/
+                    .body(dtolista)
+                    .retrieve()
+                    .toBodilessEntity(); // Ejecuta la petición sin mapear un cuerpo de respuesta complejo
+
+        } catch (Exception e) {
+            // Bloque catch vital: si api_compras está apagado o falla, capturamos el error
+            // para que no detenga el flujo y el usuario sí se devuelva exitosamente.
+            System.err.println("Advertencia: Usuario creado, pero falló la creación de la lista de deseos. Detalle: " + e.getMessage());
+        }
         // --- FIN DE COMUNICACIÓN ---
 
         // Retornar DTO sin password
@@ -195,6 +213,20 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario usuario_eliminado = usuarioRepository.findById(id_usuario)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id_usuario));
 
+
+        try {
+
+            rest.comprasRestClient().delete()
+                    .uri("/usuario/{id_usuario}", id_usuario)
+                    .retrieve()
+                    .toBodilessEntity(); // Envía la petición sin esperar respuesta compleja
+
+        } catch (Exception e) {
+            // Manejo de contingencia: si el servicio de compras falla o está apagado
+            System.err.println("Advertencia: No se pudo eliminar el carrito remoto en api_compras: " + e.getMessage());
+        }
+
+        
         usuarioRepository.delete(usuario_eliminado);
     }
 

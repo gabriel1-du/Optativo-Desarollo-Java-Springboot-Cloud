@@ -24,6 +24,8 @@ public interface CarritoService {
 
     // Metodos DELETE
     public void deleteCarrito(Long id_carrito); // Eliminar medio de pago
+
+    public void deleteCarritoByUsuario(Long id_usuario);
     
 
 } 
