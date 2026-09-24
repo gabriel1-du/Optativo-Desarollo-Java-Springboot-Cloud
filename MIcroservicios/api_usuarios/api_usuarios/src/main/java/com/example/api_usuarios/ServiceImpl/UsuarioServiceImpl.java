@@ -220,10 +220,20 @@ public class UsuarioServiceImpl implements UsuarioService {
                     .uri("/usuario/{id_usuario}", id_usuario)
                     .retrieve()
                     .toBodilessEntity(); // Envía la petición sin esperar respuesta compleja
-
         } catch (Exception e) {
             // Manejo de contingencia: si el servicio de compras falla o está apagado
             System.err.println("Advertencia: No se pudo eliminar el carrito remoto en api_compras: " + e.getMessage());
+        }
+
+         try {
+
+            rest.listaDeseosRestClient().delete()
+                    .uri("/usuario/{id_usuario}", id_usuario)
+                    .retrieve()
+                    .toBodilessEntity(); // Envía la petición sin esperar respuesta compleja
+        } catch (Exception e) {
+            // Manejo de contingencia: si el servicio de compras falla o está apagado
+            System.err.println("Advertencia: No se pudo eliminar la lista de deseos remoto en api_compras: " + e.getMessage());
         }
 
         

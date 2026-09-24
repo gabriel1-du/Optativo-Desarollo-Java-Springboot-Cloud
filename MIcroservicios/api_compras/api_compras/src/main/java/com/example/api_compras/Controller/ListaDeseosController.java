@@ -88,8 +88,8 @@ public class ListaDeseosController {
         }
     }
 
-    @DeleteMapping("/usuario/{id_lista_deseos}")
-    public ResponseEntity<?> deleteListaDeseosByUsuario(@PathVariable Long id_usuario) {
+    @DeleteMapping("/usuario/{id_usuario}")
+    public ResponseEntity<?> deleteListaDeseosByUsuario(@PathVariable("id_usuario") Long id_usuario) {
         try {
             listaService.deleteListaDeseosByUsuario(id_usuario);
             return ResponseEntity.ok("Lista de deseos asociada al usuario eliminado exitosamente");
