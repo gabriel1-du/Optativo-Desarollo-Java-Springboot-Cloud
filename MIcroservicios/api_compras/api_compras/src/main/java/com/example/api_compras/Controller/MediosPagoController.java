@@ -18,6 +18,7 @@ import com.example.api_compras.Model.MedioPago;
 import com.example.api_compras.Service.MedioPagoService;
 
 @RestController
+
 @RequestMapping("/api/mediosPagoApi") // url de acceso
 public class MediosPagoController {
 
