@@ -1,3 +1,6 @@
 [submodule "microservicios/api_usuarios"]
 	path = microservicios/api_usuarios
 	url = https://github.com/gabriel1-du/api_usuarios
+[submodule "microservicios/api_compras"]
+	path = microservicios/api_compras
+	url = https://github.com/gabriel1-du/api_compras
