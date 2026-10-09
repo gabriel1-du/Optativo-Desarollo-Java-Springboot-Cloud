@@ -1,2 +1,4 @@
 [submodule "api_usuarios"]
 	branch = master
+[submodule "api_inventario"]
+	branch = master
