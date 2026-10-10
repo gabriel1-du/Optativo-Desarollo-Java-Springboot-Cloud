@@ -10,6 +10,8 @@
 [submodule "microservicios/api_transportes"]
 	path = microservicios/api_transportes
 	url = https://github.com/gabriel1-du/api_transportes
+
 [submodule "microservicios/api_gateway"]
 	path = microservicios/api_gateway
-	url = https://github.com/gabriel1-du/api_gateway-Historietas-E-Commerce-
+	url = https://github.com/gabriel1-du/api_gateway-Historietas-E-Commerce-.git
+	branch = master
