@@ -1,20 +1,25 @@
 [submodule "microservicios/api_usuarios"]
 	branch = master
+	branch = master
 	path = microservicios/api_usuarios
 	url = https://github.com/gabriel1-du/api_usuarios
 [submodule "microservicios/api_compras"]
+	branch = master
 	branch = master
 	path = microservicios/api_compras
 	url = https://github.com/gabriel1-du/api_compras
 [submodule "microservicios/api_inventario"]
 	branch = master
+	branch = master
 	path = microservicios/api_inventario
 	url = https://github.com/gabriel1-du/api_inventario
 [submodule "microservicios/api_transportes"]
 	branch = master
+	branch = master
 	path = microservicios/api_transportes
 	url = https://github.com/gabriel1-du/api_transportes
 [submodule "microservicios/api_gateway"]
+	branch = master
 	branch = master
 	path = microservicios/api_gateway
 	url = https://github.com/gabriel1-du/api_gateway-Historietas-E-Commerce-
