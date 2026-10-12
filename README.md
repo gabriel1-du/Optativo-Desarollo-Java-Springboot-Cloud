@@ -15,6 +15,7 @@
 
 ---
 
+
 ## 📂 Instrucciones de Acceso a las APIs
 
 > **IMPORTANTE:** Para ingresar a cada una de las APIs, debe navegar a la carpeta **`microservicios`** (ubicada dentro de la carpeta del repositorio de GitHub) para acceder a los submódulos correspondientes.
@@ -30,7 +31,9 @@ La estructura general del repositorio es la siguiente:
 │   └── ApiTransporte/
 ├── README.md          ← (este archivo)
 ```
+## Arquitectura de los microservicios 
 
+![arq](<Diagramas/Arq Apis/diagramadeapis.jpg>)
 ---
 
 ## ApiGateway
