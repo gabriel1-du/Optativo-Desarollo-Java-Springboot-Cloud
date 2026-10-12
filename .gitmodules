@@ -14,3 +14,7 @@
 [submodule "microservicios/Api_Gateway"]
 	path = microservicios/Api_Gateway
 	url = https://github.com/gabriel1-du/api_gateway-Historietas-E-Commerce-
+[submodule "microservicios/api_gateway"]
+	path = microservicios/api_gateway
+	url = https://github.com/gabriel1-du/api_gateway-Historietas-E-Commerce-
+	branch = master
