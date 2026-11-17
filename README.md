@@ -31,6 +31,9 @@ La estructura general del repositorio es la siguiente:
 │   └── ApiTransporte/
 ├── README.md          ← (este archivo)
 ```
+
+> 🐳 **Docker:** por ahora los archivos Docker están disponibles en `microservicios/api_compras` y `microservicios/api_transportes`. En cada sección se muestran los comandos para ejecutarlos en **local** (archivo que **no** tiene `.prod`) y en **producción** (archivo que sí lo tiene; en `api_transportes` se llama `docker-compose-prod.yml`).
+
 ## Arquitectura de los microservicios 
 
 ![arq](<Diagramas/Arq Apis/diagramadeapis.jpg>)
@@ -260,6 +263,77 @@ api_compras/
                 └── HistorietaClient.java
 ```
 
+### Docker
+
+Archivos Docker disponibles en `microservicios/api_compras/`:
+
+| Archivo | Uso |
+|---|---|
+| `Dockerfile` | Construcción multi-etapa: compila el JAR con Maven y lo ejecuta sobre Java 21 (JRE Alpine). |
+| `docker-compose.yml` | **Local**. Levanta la API y un MySQL 8.0 dentro de Docker. |
+| `docker-compose.prod.yml` | **Producción**. Solo levanta la API; la base de datos es externa (por ejemplo, AWS RDS). |
+| `.env.example` | Plantilla de variables de entorno para la base de datos. |
+| `.env` | Variables reales del entorno. **No se versiona** (está en `.gitignore`). |
+| `init.sql` | Script que crea las tablas cuando se inicializa el MySQL local. |
+
+> **Local vs. producción:** el archivo **sin** `.prod` es el de local. En este microservicio: `docker-compose.yml` → local y `docker-compose.prod.yml` → producción.
+
+#### Ejecución local (con MySQL incluido)
+
+`docker-compose.yml` levanta la API en el puerto `8081` y un MySQL 8.0 en el puerto `3307` del host. La base se inicializa con `init.sql` la primera vez y los datos quedan persistidos en el volumen `db_data_local`.
+
+```bash
+cd microservicios/api_compras
+
+# Crear el archivo .env a partir de la plantilla
+cp .env.example .env
+
+# Editar .env con los datos del MySQL local
+# DB_HOST=mysql-db
+# DB_PORT=3306
+# DB_USER=root
+# DB_PASSWORD=hola123
+# DB_NAME=compras_db
+# SERVER_PORT=8081
+
+docker compose -f docker-compose.yml up --build
+```
+
+- API: `http://localhost:8081`
+- MySQL: `localhost:3307` (contenedor `api-compras-local`)
+
+Comandos útiles:
+
+```bash
+# Ver logs de la API
+docker compose -f docker-compose.yml logs -f api-compras
+
+# Detener los contenedores
+docker compose -f docker-compose.yml down
+
+# Detener y borrar también los datos de MySQL
+docker compose -f docker-compose.yml down -v
+```
+
+#### Ejecución en producción / nube
+
+`docker-compose.prod.yml` **no** incluye MySQL: solo construye y levanta la API. La conexión a la base de datos y demás variables se toman desde `.env` (por ejemplo, apuntando a un RDS de AWS).
+
+```bash
+cd microservicios/api_compras
+
+# .env debe apuntar a la base de datos y servicios reales
+docker compose -f docker-compose.prod.yml up --build -d
+```
+
+```bash
+# Ver logs
+docker compose -f docker-compose.prod.yml logs -f
+
+# Detener
+docker compose -f docker-compose.prod.yml down
+```
+
 ### Endpoints de Controlador
 
 | Recurso | Ruta base | Métodos |
@@ -324,6 +398,74 @@ api_transporte/
                 ├── UsuarioClient.java
                 └── BoletaClient.java
 ```
+
+### Docker
+
+Archivos Docker disponibles en `microservicios/api_transportes/`:
+
+| Archivo | Uso |
+|---|---|
+| `Dockerfile` | Construcción multi-etapa: compila el JAR con Maven y lo ejecuta sobre Java 21 (JRE Alpine). |
+| `docker-compose.yml` | **Local**. Levanta la API y un MySQL 8.0 dentro de Docker. |
+| `docker-compose-prod.yml` | **Producción** (con guion, no con punto). Solo levanta la API; la base de datos es externa. |
+| `.env` | Variables de entorno (base de datos, puerto y URLs de otros microservicios). **No se versiona**. |
+| `init.sql` | Script que crea las tablas cuando se inicializa el MySQL local. |
+
+> **Local vs. producción:** el archivo **sin** `.prod` es el de local. En este microservicio el archivo de producción se llama **`docker-compose-prod.yml`** (con guion), no `docker-compose.prod.yml`.
+
+#### Ejecución local (con MySQL incluido)
+
+`docker-compose.yml` levanta la API en el puerto `8084` y un MySQL 8.0 en el puerto `3307` del host. El compose **sobrescribe** `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD` y `SERVER_PORT` para que el contenedor use el MySQL local, por lo que las variables de base de datos del `.env` no se usan en local. La base se inicializa con `init.sql` la primera vez y los datos quedan en el volumen `db_data_local`.
+
+El archivo `.env` debe existir (aunque sea local) porque el compose lo referencia con `env_file`; úsalo para las URLs de los otros microservicios:
+
+```bash
+cd microservicios/api_transportes
+
+# Crear/editar .env con las URLs de los servicios externos
+# USUARIOS_URL=http://localhost:8080/api/usuariosApi
+# INVENTARIO_URL=http://localhost:8083/api/historietaApi
+# COMPRAS_URL=http://localhost:8081/api/boletasApi
+
+docker compose -f docker-compose.yml up --build
+```
+
+- API: `http://localhost:8084`
+- MySQL: `localhost:3307` (contenedor `api-transporte-local`)
+
+Comandos útiles:
+
+```bash
+# Ver logs de la API
+docker compose -f docker-compose.yml logs -f api-transporte
+
+# Detener los contenedores
+docker compose -f docker-compose.yml down
+
+# Detener y borrar también los datos de MySQL
+docker compose -f docker-compose.yml down -v
+```
+
+#### Ejecución en producción / nube
+
+`docker-compose-prod.yml` **no** incluye MySQL: solo construye y levanta la API. La conexión a la base de datos y las URLs de los otros servicios se toman desde `.env`.
+
+```bash
+cd microservicios/api_transportes
+
+# .env debe apuntar a la base de datos y servicios reales
+docker compose -f docker-compose-prod.yml up --build -d
+```
+
+```bash
+# Ver logs
+docker compose -f docker-compose-prod.yml logs -f
+
+# Detener
+docker compose -f docker-compose-prod.yml down
+```
+
+> ⚠️ **Nota:** la versión actual de `docker-compose-prod.yml` define el servicio como `api-compras` y declara `depends_on: mysql-db`, pero ese archivo no incluye el servicio `mysql-db`. Antes de usarlo, renombra el servicio a `api-transporte` y elimina el `depends_on`; de lo contrario Docker Compose fallará indicando que la dependencia no existe. La base de datos externa se configura con las variables de `.env`.
 
 ### Endpoints de Controlador
 
